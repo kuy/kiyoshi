@@ -50,7 +50,7 @@ function* doCheck() {
 
 function* check() {
   while (true) {
-    const ret = yield call(doCheck);
+    yield call(doCheck);
   }
 }
 
