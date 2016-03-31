@@ -6,7 +6,7 @@ import {
 const initial = {
   app: {
     list: [],
-    done: false
+    music: true
   }
 };
 
@@ -19,7 +19,7 @@ const handlers = {
       return { ...state, list: [ ...state.list, 'ドコ' ] };
     },
     [KIYOSHI]: (state, action) => {
-      return { list: [ ...state.list, 'キ・ヨ・シ！' ], done: true };
+      return { list: [ ...state.list, 'キ・ヨ・シ！' ], music: false };
     }
   }
 };

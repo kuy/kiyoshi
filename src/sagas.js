@@ -11,13 +11,13 @@ function wait() {
   });
 }
 
-function* generate() {
-  while (true) {
-    if (yield select(state => state.app.done)) {
-      break;
-    }
+function sing() {
+  return 0.5 < Math.random() ? zun() : doko();
+}
 
-    yield put(0.5 < Math.random() ? zun() : doko());
+function* river() {
+  while (yield select(state => state.app.music)) {
+    yield put(sing());
     yield call(wait);
   }
 }
@@ -29,27 +29,27 @@ function* expect(type) {
   }
 }
 
-function* doCheck() {
+function* check() {
   try {
     yield call(expect, ZUN);
     yield call(expect, ZUN);
     yield call(expect, ZUN);
     yield call(expect, ZUN);
     yield call(expect, DOKO);
+    yield put(kiyoshi());
   } catch (e) {
     return;
   }
-  yield put(kiyoshi());
 }
 
-function* check() {
+function* checkLoop() {
   while (true) {
-    yield fork(doCheck);
+    yield fork(check);
     yield take('*');
   }
 }
 
 export default function* rootSaga() {
-  yield fork(check);
-  yield fork(generate);
+  yield fork(river);
+  yield fork(checkLoop);
 }
