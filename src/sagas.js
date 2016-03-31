@@ -30,27 +30,15 @@ function* expect(type) {
 }
 
 function* doCheck() {
-  console.log('start');
-
   try {
     yield call(expect, ZUN);
-    console.log('ZUN (1)');
-
     yield call(expect, ZUN);
-    console.log('ZUN (2)');
-
     yield call(expect, ZUN);
-    console.log('ZUN (3)');
-
     yield call(expect, ZUN);
-    console.log('ZUN (4)');
-
     yield call(expect, DOKO);
-    console.log('DOKO');
   } catch (e) {
     return;
   }
-
   yield put(kiyoshi());
 }
 
