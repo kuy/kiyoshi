@@ -1,13 +1,15 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import logger from 'redux-logger';
 import reducer from './reducers';
 import saga from './sagas';
+import DevTools from './dev-tools';
 
 export default createStore(
   reducer,
-  applyMiddleware(
-    createSagaMiddleware(saga),
-    logger()
+  compose(
+    applyMiddleware(
+      createSagaMiddleware(saga)
+    ),
+    DevTools.instrument()
   )
 );
