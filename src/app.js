@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 class App extends Component {
   render() {
     const { app: { list } } = this.props;
-    return <ul>
+    return <div>
       {list.map(item =>
-        <li>{item}</li>
+        <span>{item}</span>
       )}
-    </ul>;
+    </div>;
   }
 }
 

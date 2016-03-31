@@ -7,14 +7,13 @@ function wait() {
   return new Promise(resolve => {
     setTimeout(() => {
       resolve();
-    }, 1500);
+    }, 750);
   });
 }
 
 function* generate() {
   while (true) {
-    const { done } = yield select(state => state.app);
-    if (done) {
+    if (yield select(state => state.app.done)) {
       break;
     }
 
@@ -23,38 +22,46 @@ function* generate() {
   }
 }
 
+function* expect(type) {
+  const action = yield take('*');
+  if (type !== action.type) {
+    throw 'unexpected';
+  }
+}
+
 function* doCheck() {
-  let action = yield take('*');
-  if (action.type !== ZUN) { return; }
-  console.log('check ZUN (1)');
+  console.log('start');
 
-  action = yield take('*');
-  if (action.type !== ZUN) { return; }
-  console.log('check ZUN (2)');
+  try {
+    yield call(expect, ZUN);
+    console.log('ZUN (1)');
 
-  action = yield take('*');
-  if (action.type !== ZUN) { return; }
-  console.log('check ZUN (3)');
+    yield call(expect, ZUN);
+    console.log('ZUN (2)');
 
-  action = yield take('*');
-  if (action.type !== ZUN) { return; }
-  console.log('check ZUN (4)');
+    yield call(expect, ZUN);
+    console.log('ZUN (3)');
 
-  action = yield take('*');
-  if (action.type !== DOKO) { return; }
-  console.log('check DOKO');
+    yield call(expect, ZUN);
+    console.log('ZUN (4)');
+
+    yield call(expect, DOKO);
+    console.log('DOKO');
+  } catch (e) {
+    return;
+  }
 
   yield put(kiyoshi());
-  console.log('check KIYOSHI!');
 }
 
 function* check() {
   while (true) {
-    yield call(doCheck);
+    yield fork(doCheck);
+    yield take('*');
   }
 }
 
 export default function* rootSaga() {
-  yield fork(generate);
   yield fork(check);
+  yield fork(generate);
 }
